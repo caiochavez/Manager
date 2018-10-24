@@ -16,6 +16,15 @@ export const employeeCreate = ({ name, phone, shift }) => {
     setTimeout(() => {
       dispatch({ type: 'employee_create' })
       Actions.pop({ type: 'reset' })
+    }, 2000)
+  }
+}
+
+export const employeesFetch = () => {
+  const { currentUser } = firebase.auth()
+  return dispatch => {
+    firebase.database().ref(`/users/${currentUser.uid}/employees`).on('value', snapshot => {
+      dispatch({ type: 'employees_fetch_success', payload: snapshot.val() })
     })
   }
 }
