@@ -27,7 +27,7 @@ class EmployeeList extends Component {
   render () {
     return (
       <FlatList
-      data={this.dataSource}
+      data={this.dataSource} 
       renderItem={this.renderRow} />
     )
   }
@@ -35,7 +35,6 @@ class EmployeeList extends Component {
 }
 
 const mapStateToProps = state => {
-  console.log('employees: ', state.employees)
   const employees = _.map(state.employees, (val, uid) => {
     return { ...val, uid }
   })
