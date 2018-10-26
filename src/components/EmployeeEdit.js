@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import Communications from 'react-native-communications'
 import Card from './common/Card'
 import CardSection from './common/CardSection'
 import Button from './common/Button'
@@ -21,6 +22,32 @@ class EmployeeEdit extends Component {
     this.props.employeeSave({ name, phone, shift, uid })
   }
 
+  onTextPress () {
+    const { phone, shift } = this.props
+    Communications.text(phone, `Seu próximo turno é ${this.tranlateShift(shift)}`)
+  }
+
+  tranlateShift (shift) {
+    switch (shift) {
+      case 'monday':
+        return 'segunda'
+      case 'tuesday':
+        return 'terça'
+      case 'wednesday':
+        return 'quarta'
+      case 'thursday':
+        return 'quinta'
+      case 'friday':
+        return 'sexta'
+      case 'saturday':
+        return 'sábado'
+      case 'sunday':
+        return 'domingo'
+      default:
+        return ''
+    }
+  }
+
   render () {
     return (
       <Card>
@@ -28,6 +55,11 @@ class EmployeeEdit extends Component {
         <CardSection>
           <Button flex={1} onPress={this.onButtonPress.bind(this)}>
             Salvar Mudanças
+          </Button>
+        </CardSection>
+        <CardSection>
+          <Button flex={1} onPress={this.onTextPress.bind(this)}>
+            Agenda de Texto
           </Button>
         </CardSection>
       </Card>
