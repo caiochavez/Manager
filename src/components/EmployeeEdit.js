@@ -4,11 +4,14 @@ import Communications from 'react-native-communications'
 import Card from './common/Card'
 import CardSection from './common/CardSection'
 import Button from './common/Button'
+import Confirm from './common/Confirm'
 import EmployeeForm from './EmployeeForm'
-import { employeeUpdate, employeeSave } from '../actions'
+import { employeeUpdate, employeeSave, employeeDelete } from '../actions'
 import _ from 'lodash'
 
 class EmployeeEdit extends Component {
+
+  state = { showModal: false }
 
   componentWillMount () {
     _.each(this.props.employee, (value, key) => { 
@@ -48,6 +51,15 @@ class EmployeeEdit extends Component {
     }
   }
 
+  onAccept () {
+    const uid = this.props.employee.uid
+    this.props.employeeDelete({ uid })
+  }
+
+  onDecline () {
+    this.setState({ showModal: false })
+  }
+
   render () {
     return (
       <Card>
@@ -62,6 +74,17 @@ class EmployeeEdit extends Component {
             Agenda de Texto
           </Button>
         </CardSection>
+        <CardSection>
+          <Button flex={1} onPress={() => this.setState({ showModal: !this.state.showModal })}>
+            Excluir empregado
+          </Button>
+        </CardSection>
+        <Confirm
+        visible={this.state.showModal}
+        onAccept={this.onAccept.bind(this)}
+        onDecline={this.onDecline.bind(this)}>
+          Tem certeza que deseja excluir este ?
+        </Confirm>
       </Card>
     )
   }
@@ -72,4 +95,4 @@ const mapStateToProps = state => {
   const { name, phone, shift } = state.employeeForm
   return { name, phone, shift }
 }
-export default connect(mapStateToProps, { employeeUpdate, employeeSave })(EmployeeEdit)
+export default connect(mapStateToProps, { employeeUpdate, employeeSave, employeeDelete })(EmployeeEdit)
